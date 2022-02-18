@@ -25,6 +25,49 @@ function navLoginClick(evt) {
 
 $navLogin.on("click", navLoginClick);
 
+function navSubmitStory(evt)
+{
+  // Hide all the pages components
+  hidePageComponents();
+  // Display the story form
+  $storyForm.show();
+  // Display all the stories
+  $allStoriesList.show();
+}
+
+$navSubmit.on("click", navSubmitStory)
+
+function navFavoriteStories(evt)
+{
+  // Hide all the pages components
+  hidePageComponents();
+  // Displays the users favorites
+  displayUsersFavorites();
+}
+
+$navFavorites.on("click", navFavoriteStories);
+
+function navUserStories(evt)
+{
+  // Hide all the pages components.
+  hidePageComponents();
+  // Displays the user stories
+  displayUserStories();
+  $userStories.show();
+}
+
+$navUserStories.on("click", navUserStories);
+
+function navProfile()
+{
+  // Hide all the pages components.
+  hidePageComponents();
+  // Show the user's profile
+  $userProfile.show();
+}
+
+$navUserProfile.on("click", navProfile);
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
