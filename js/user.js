@@ -114,13 +114,3 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
-
-function displayUserProfile()
-{
-  // Displays the current user's name
-  $("#profile-name").text(currentUser.name);
-  // Displays the current user's username
-  $("#profile-username").text(currentUser.username);
-  // Displays the current user's date of creation
-  $("#profile-creation-date").text(currentUser.createdAt.slice(0,10));
-}

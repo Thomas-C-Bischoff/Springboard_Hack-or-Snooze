@@ -24,7 +24,8 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    return new URL(this.url).host;
+    // UNIMPLEMENTED: complete this function!
+    return "hostname.com";
   }
 }
 
@@ -72,41 +73,8 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, {title, author, url}) {
-    // Posts the given story under the given user's token.
-    const response = await axios({
-      url: `${BASE_URL}/stories`,
-      method: "post",
-      data: {
-        token: user.loginToken,
-        story: {title, author, url}
-      }
-    });
-    // Creates a new story based off of the information that was just posted.
-    const newStory = new Story(response.data.Story);
-    // Prepends the new story to the list of user stories.
-    user.ownStories(newStory);
-    // Prepends the new story to the current list of stories.
-    this.stories.unshift(newStory);
-    // Returns the new story.
-    return newStory;
-  }
-
-  // Handles removing a story with the given story ID from all sources that contain it.
-  async removeStory(user, storyID)
-  {
-    // Deletes the story assiociated with the story ID from the API.
-    const response = await axios({
-      url: `${BASE_URL}/stories/${storyID}`,
-      method: "delete",
-      data: {token: user.loginToken}
-    });
-    // Filter out the story with the given story ID from the list of all the stories on the API.
-    this.stories = this.stories.filter(story => story.storyId !== storyID);
-    // Filter out the story with the given story ID from the list of the given users own stories.
-    user.ownStories = user.ownStories.filter(story => story.storyId !== storyID);
-    // Filter out the sory with the given story ID from the list of the given users favorited stories.
-    user.favorites = user.favorites.filter(story => story.storyId !== storyID);
+  async addStory( /* user, newStory */) {
+    // UNIMPLEMENTED: complete this function!
   }
 }
 
@@ -224,35 +192,5 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
-  }
-
-  // Handles adding the given story from the user's favorite list.
-  async favorite(story)
-  {
-    // Add the given story to list of user favorites.
-    this.favorites.push(story);
-    // Get the user's login token
-    const token = this.loginToken;
-    // Update the user's favorites list on the API.
-    const response = await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: "post",
-      data: {token}
-    });
-  }
-
-  // Handles removing the given story from the user's favorite list.
-  async unfavorite(story)
-  {
-    // Filter out the given story from the user's favorite list.
-    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
-    // Get the user's login token.
-    const token = this.loginToken;
-    // Update the user's favorite list on the API.
-    const response = await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: "delete",
-      data: {token}
-    });
   }
 }
