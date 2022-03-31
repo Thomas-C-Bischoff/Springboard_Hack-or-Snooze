@@ -37,6 +37,17 @@
   <div class="navbar-brand">
     <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
   </div>
+
+  <!--Section of the Navbar Which Contains User Related Actions-->
+  <div class = "navbar-user_links hidden">
+    |
+    <a class = "nav-link" href = "#" id = "nav-submit_story">Submit</a>
+    |
+    <a class = "nav-link" href = "#" id = "nav-favorites">Favorites</a>
+    |
+    <a class = "nav-link" href = "#" id = "nav-my_stories">My Stories</a>
+  </div>
+
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
@@ -45,13 +56,37 @@
 </nav>
 
 <!-- area for stories (all stories, user stories, favorites) -->
-<section class="stories-container container">
+<section class = "stories-container container">
+
+  <!--Form Where User Fills Out Infomration Required for a New Story-->
+  <form class = "hidden" id = "form-submit">
+    <div>
+      <label for = "story-author">Author</label>
+      <input required id = "story-author" placeholder = "Author's Name">
+    </div>
+    <div>
+      <label for = "story-title">Title</label>
+      <input required id = "story-title" placeholder = "Story's Title">
+    </div>
+    <div>
+      <label for = "story-url">URL</label>
+      <input required id = "story-url" placeholder = "Story's URL">
+    </div>
+    <button type = "submit">Submit</button>
+    <hr>
+  </form>
 
   <!-- loading message (removed by JS after stories loaded) -->
   <div id="stories-loading-msg">Loading&hellip;</div>
 
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
+
+  <!--List Used to Display the User's Favorited Stories-->
+  <ol id = "favorite-stories-list" class = "stories-list hidden"></ol>
+
+  <!--List Used to Display the Stories Created by the User-->
+  <ol id = "my-stories" class = "stories-list hidden"></ol>
 
 </section>
 
@@ -94,6 +129,18 @@
     </div>
     <button type="submit">create account</button>
   </form>
+</section>
+
+<!--Section Used to Display the User's Information-->
+<section id = "user-profile" class = "hidden">
+  <div class = "user-profile-box container">
+    <h4>User Profile Info</h4>
+    <section>
+      <div>Name: <span id = "profile-name"></span></div>
+      <div>Username: <span id = "profile-username"></span></div>
+      <div>Account Created: <span id = "profile-account_date"></span></div>
+    </section>
+  </div>
 </section>
 
 <!-- Library JS & our JS -->

@@ -24,8 +24,7 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    return new URL(this.url).host;
   }
 }
 
@@ -73,8 +72,34 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
-    // UNIMPLEMENTED: complete this function!
+  async addStory(user, {title, author, url}) 
+  {
+    const token = user.loginToken; // Get the Current User's Login Token.
+    console.debug("test 2");
+    const response = await axios({
+      method: "POST",
+      url: `${BASE_URL}/stories`,
+      data: {token, story: {title, author, url}}
+    }); // Posts the New Story to https://hack-or-snooze-v3.herokuapp.com/stories
+    console.debug("test 3");
+    const story = new Story({title, author, url}); // Create a New Story from the Posted Data
+    user.ownStories.unshift(story); // Add the Story to the Front of the User Stories Array
+    this.stories.unshift(story); // Add the Story to Front of the Stories Array
+    return story;
+  }
+
+  // Handles Deleting a Story from at a Given ID
+  async removeStory(user, storyID)
+  {
+    const token = user.loginToken; // Get the Current User's Token
+    await axios({
+      method: "DELETE",
+      url: `${BASE_URL}/stories/${storyID}`,
+      data: { token: user.loginToken }
+    }); // Deletes the Story at https://hack-or-snooze-v3.herokuapp.com/stories/storyID
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId); // Filter Out the Deleted Story from the User's Create Storied
+    user.favorites = user.favorites.filter(s => s.storyId !== storyId); // Filter Out the Deleted Story from the User's Favorited Stories
+    this.stories = this.stories.filter(s => story.storyID !== storyID); // Filter Out the Deleted Story from All the Stories.
   }
 }
 
@@ -192,5 +217,37 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  // Handles Returning True or False if the Given Story is a Favorite
+  isFavorite(story)
+  {
+    return this.favorites.includes(story);
+  }
+
+  // Handles Adding a Given Story to the User's Favorites
+  async addFavorite(story)
+  {
+    if (this.isFavorite(story)) { return; } // Check if the User Favorites Already Contains the Story
+    const token = this.loginToken; // Get the Current Login Token
+    this.favorites.push(story); // Add the Story to the User's Favorites
+    await axios({
+      method: "POST",
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      data: { token }
+    }); // Post the Story to User's Favorites Page.
+  }
+
+  // Handles Removing a Given Story from the User's Favorites
+  async removeFavorite(story)
+  {
+    if (!this.isFavorite(story)) { return; } // Check if the User Favorites Doesn't Contains the Story
+    const token = this.loginToken; // Get the Current Login Token
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId); // Filter Out the Story from the User's Favorites
+    await axios({
+      method: "DELETE",
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      data: { token }
+    }); // Delete the Story to User's Favorites Page.
   }
 }
